@@ -6,7 +6,6 @@ import 'package:posha/data/datasources/local/favorites_local_datasource.dart';
 import 'package:posha/data/datasources/remote/meal_api_service.dart';
 import 'package:posha/data/models/recipe_model.dart';
 import 'package:posha/data/repositories/recipe_repository_impl.dart';
-import 'package:posha/domain/entities/recipe.dart';
 
 class MockRemoteDataSource extends Mock implements MealApiService {}
 

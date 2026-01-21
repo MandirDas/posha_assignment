@@ -18,10 +18,8 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    );
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
 
     _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
@@ -45,6 +43,8 @@ class _SplashScreenState extends State<SplashScreen>
     final prefs = await SharedPreferences.getInstance();
     final bool onboardingCompleted =
         prefs.getBool('onboarding_completed') ?? false;
+
+    if (!mounted) return;
 
     if (onboardingCompleted) {
       context.go('/recipes');
@@ -82,8 +82,12 @@ class _SplashScreenState extends State<SplashScreen>
                   color: Colors.white,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.restaurant_menu,
-                    size: 80, color: Colors.orange),
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 100, // Adjusted size
+                  height: 100,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             const SizedBox(height: 20),

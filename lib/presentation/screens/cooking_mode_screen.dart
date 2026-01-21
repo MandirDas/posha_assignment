@@ -17,15 +17,13 @@ class _CookingModeScreenState extends State<CookingModeScreen>
   // Phase Control
   bool _isPrepPhase = true;
 
-  // Prep Phase State
   final List<Ingredient> _remainingIngredients = [];
   final List<Ingredient> _preparedIngredients = [];
   late List<AnimationController> _controllers;
 
-  // Store relative positions (0.0 - 1.0) keyed by ingredient name to maintain stability
+  // Storing position mappings to keep things frame-stable
   final Map<String, Offset> _ingredientPositions = {};
 
-  // Instructions Phase State
   int _currentStepIndex = 0;
   late List<String> _instructions;
 
@@ -34,7 +32,7 @@ class _CookingModeScreenState extends State<CookingModeScreen>
     super.initState();
     _remainingIngredients.addAll(widget.recipe.ingredients);
 
-    // Initialize standard floating animations
+    // Random floaty animation stuff
     _controllers = List.generate(widget.recipe.ingredients.length, (index) {
       return AnimationController(
         vsync: this,
@@ -44,6 +42,7 @@ class _CookingModeScreenState extends State<CookingModeScreen>
 
     _assignGridPositions();
 
+    // TODO: Ideally this should formated in the data layer not here
     _instructions = widget.recipe.instructions
         .split(RegExp(r'\r\n|\n|\r'))
         .where((s) => s.trim().isNotEmpty)
@@ -51,44 +50,31 @@ class _CookingModeScreenState extends State<CookingModeScreen>
   }
 
   void _assignGridPositions() {
-    // Grid Logic to prevent overlap
+    // Basic grid logic to stop ingredients overlapping
     final int count = widget.recipe.ingredients.length;
-    final int cols = 3; // 3 columns looks good on mobile
+    final int cols = 3;
     final int rows = (count / cols).ceil();
 
-    // Create a list of available slots indices
     final List<int> slots = List.generate(count, (index) => index);
-    slots.shuffle(); // Randomize assignment
-
-    // Calculate margins to keep bubbles inside safety zones
-    // We assume bubble size ~80-100px relative to screen width
-    // A safe margin is roughly 0.5 unit of cell width/height
+    slots.shuffle();
 
     final r = Random();
 
     for (int i = 0; i < count; i++) {
       final slotIndex = slots[i];
-      final row = slotIndex ~/ cols; // Integer division
+      final row = slotIndex ~/ cols;
       final col = slotIndex % cols;
 
-      // Base cell position (top-left of the cell in 0.0-1.0 coordinates)
-      // We use slightly smaller divisors or margins to avoid edge clipping
-      // Let's divide space into uniform grid cells.
-
-      // Cell width = 1.0 / cols
-      // Cell height = 1.0 / rows (approx, but we have variable height container.
-      // We probably want to limit total height used to 0.1 to 0.8 range)
-
+      // Calculate cell bounds
       final cellWidth = 1.0 / cols;
-      final cellHeight =
-          0.7 / max(rows, 1); // Use 70% of vertical space, start at 0.1
+      final cellHeight = 0.7 / max(rows, 1);
 
-      // Random jitter within the cell (keep central 60% of cell to avoid border touches)
+      // Add some jitter so it doesn't look too grid-like
       final jitterX = (r.nextDouble() * 0.4 * cellWidth) + (0.1 * cellWidth);
       final jitterY = (r.nextDouble() * 0.4 * cellHeight) + (0.1 * cellHeight);
 
       final x = (col * cellWidth) + jitterX;
-      final y = 0.1 + (row * cellHeight) + jitterY; // Start at 10% height
+      final y = 0.1 + (row * cellHeight) + jitterY;
 
       final ingredientName = widget.recipe.ingredients[i].name;
       _ingredientPositions[ingredientName] = Offset(x, y);

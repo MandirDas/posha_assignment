@@ -40,12 +40,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Parallax Layer 1 (Background - Slowest)
+          // Background
           Positioned(
             top: 0,
             bottom: 0,
             left: 0,
-            right: -200, // Entend width to cover parallax movement
+            right: -200,
             child: Transform.translate(
               offset: Offset(-_pageOffset * 50, 0),
               child: Container(
@@ -60,7 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
 
-          // Parallax Layer 2 (Abstract Shapes - Medium Speed)
+          // Floating shapes
           Positioned(
             top: 100,
             right: -50 - (_pageOffset * 100),
@@ -74,7 +74,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 size: 300, color: Colors.red.withOpacity(0.05)),
           ),
 
-          // Foreground (PageView)
+          // Content
           PageView(
             controller: _pageController,
             children: [

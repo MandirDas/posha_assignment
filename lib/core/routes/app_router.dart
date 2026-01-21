@@ -70,7 +70,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/cooking_mode',
         builder: (context, state) {
-          final recipe = state.extra as Recipe; // Expect Recipe object
+          final recipe = state.extra as Recipe;
           return CookingModeScreen(recipe: recipe);
         },
       ),

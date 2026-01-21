@@ -32,13 +32,13 @@ class RecipeListScreen extends ConsumerWidget {
               ref.read(sortAZProvider.notifier).update((state) => !state);
             },
           ),
-          IconButton(
-            icon: Icon(isGrid ? Icons.view_list : Icons.grid_view),
-            tooltip: "Toggle View",
-            onPressed: () {
-              ref.read(isGridViewProvider.notifier).update((state) => !state);
-            },
-          ),
+          // IconButton(
+          //   icon: Icon(isGrid ? Icons.view_list : Icons.grid_view),
+          //   tooltip: "Toggle View",
+          //   onPressed: () {
+          //     ref.read(isGridViewProvider.notifier).update((state) => !state);
+          //   },
+          // ),
         ],
       ),
       body: Column(
